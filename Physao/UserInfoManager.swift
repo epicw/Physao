@@ -42,6 +42,39 @@ class UserInfoManager: NSObject{
         return (result, fvcResult, fev1Result)
     }
     
+    func saveNewFriend(nameFrom: String, nameTo: String, times: String, untilDate: String) -> Bool{
+        sharedInstance.database!.open()
+        let isInserted = sharedInstance.database!.executeUpdate("INSERT INTO friendsTable (hostName,friendName, times, untilDate) VALUES (?,?,?,?)", withArgumentsInArray: [nameFrom, nameTo, times, untilDate])
+        sharedInstance.database!.close()
+        
+        //getAllFriends(nameFrom)
+        
+        return isInserted
+    }
+    
+    func getAllFriends(hostName: String) -> [Patient]{
+        sharedInstance.database!.open()
+        
+        let querySQL = "SELECT * FROM friendsTable where hostName = '\(hostName)'"
+        let results: FMResultSet? = sharedInstance.database!.executeQuery(querySQL, withArgumentsInArray: nil)
+        var friendsname:[String] = []
+        var friendsObjects:[Patient] = []
+        if(results != nil){
+            while results!.next(){
+                let friend_name = results!.stringForColumn("friendName")
+                let timesPatient = results!.stringForColumn("times")
+                let untilDate = results!.stringForColumn("untilDate")
+                let patient = Patient(name: friend_name, times: timesPatient, date: untilDate)
+                friendsname.append(friend_name)
+                friendsObjects.append(patient)
+                //print(friend_name)
+            }
+        }
+        sharedInstance.database!.close()
+        printString(friendsname)
+        return friendsObjects
+    }
+    
     func addUserInfoData(name: String, password: String) -> Bool{
         sharedInstance.database!.open()
         let isInserted = sharedInstance.database!.executeUpdate("INSERT INTO userTable (UserName,Password) VALUES (?,?)", withArgumentsInArray: [name, password])
