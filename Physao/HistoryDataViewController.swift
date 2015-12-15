@@ -177,7 +177,7 @@ class HistoryDataViewController: UIViewController {
             chartDataSet.drawValuesEnabled = false
         }
         let chartData = LineChartData(xVals: dataPoints, dataSet: chartDataSet)
-        lineChart.rightAxis.enabled = false
+        lineChart.rightAxis.enabled = true
         lineChart.descriptionText = ""
         lineChart.data = chartData
         lineChart.xAxis.labelPosition = .Bottom
