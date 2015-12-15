@@ -25,29 +25,10 @@ class UserInfoManager: NSObject{
         return sharedInstance
     }
     
-    func getAllDate()->(dates:[String], FVC:[Double], FEV1:[Double]){
-        sharedInstance.database!.open()
-        let querySQL = "SELECT * FROM DataTable1"
-        var result:[String] = []
-        var fvcResult:[Double] = []
-        var fev1Result:[Double] = []
-        let findDate = sharedInstance.database!.executeQuery(querySQL, withArgumentsInArray: nil)
-        if findDate != nil{
-            while findDate.next(){
-                result.append(findDate!.stringForColumn("date"))
-                fvcResult.append((findDate!.stringForColumn("fvc") as NSString).doubleValue)
-                fev1Result.append((findDate!.stringForColumn("fev1") as NSString).doubleValue)
-            }
-        }
-        
-        printString(result)
-        sharedInstance.database!.close()
-        return (result, fvcResult, fev1Result)
-    }
-    
+    // Get all of the history data from the SQLite database.
     func getUserHistoryData(userName: String)->([String: userData]){
         sharedInstance.database!.open()
-        let querySQL = "SELECT * FROM DataTable1"
+        let querySQL = "SELECT * FROM DataTable1 where userName = '\(userName)'"
         var result:[String: userData] = [:]
         let findResult = sharedInstance.database!.executeQuery(querySQL, withArgumentsInArray: nil)
         if findResult != nil{
@@ -68,15 +49,11 @@ class UserInfoManager: NSObject{
         sharedInstance.database!.open()
         let isInserted = sharedInstance.database!.executeUpdate("INSERT INTO friendsTable (hostName,friendName, times, untilDate) VALUES (?,?,?,?)", withArgumentsInArray: [nameFrom, nameTo, times, untilDate])
         sharedInstance.database!.close()
-        
-        //getAllFriends(nameFrom)
-        
         return isInserted
     }
     
     func getAllFriends(hostName: String) -> [Patient]{
         sharedInstance.database!.open()
-        
         let querySQL = "SELECT * FROM friendsTable where hostName = '\(hostName)'"
         let results: FMResultSet? = sharedInstance.database!.executeQuery(querySQL, withArgumentsInArray: nil)
         var friendsname:[String] = []
@@ -89,11 +66,9 @@ class UserInfoManager: NSObject{
                 let patient = Patient(name: friend_name, times: timesPatient, date: untilDate)
                 friendsname.append(friend_name)
                 friendsObjects.append(patient)
-                //print(friend_name)
             }
         }
         sharedInstance.database!.close()
-        printString(friendsname)
         return friendsObjects
     }
     
@@ -107,9 +82,7 @@ class UserInfoManager: NSObject{
     func logInFunction(name: String, password: String) -> Bool{
         sharedInstance.database!.open()
         let querySQL = "SELECT password FROM userTable where username = '\(name)'"
-        
         let results: FMResultSet? = sharedInstance.database!.executeQuery(querySQL, withArgumentsInArray: nil)
-        
         if(results?.next() == true){
             let passwordFromDB = results!.stringForColumn("password")
             if(passwordFromDB == password){
@@ -133,22 +106,8 @@ class UserInfoManager: NSObject{
                 userArray.append(user)
             }
         }
-        printArray(userArray)
         sharedInstance.database!.close()
     }
-    
-    func printArray(array: [UserInfo]){
-        for item in array{
-            print(item.userName + ": " + item.password)
-        }
-    }
-    
-    func printString(array: [String]){
-        for item in array{
-            print(item)
-        }
-    }
-    
     
     class func getHKData() -> (FVC: [PhysaoDataPoint], FEV1: [PhysaoDataPoint], PEFR: [PhysaoDataPoint], Ratio: [PhysaoDataPoint]){
         
@@ -162,21 +121,15 @@ class UserInfoManager: NSObject{
         var PEFRResult = [PhysaoDataPoint]()
         
         let FVCCallback = { (data: [PhysaoDataPoint], error: NSError!) -> Void in
-            
             FVCResult = data
-            
         }
         
         let FEV1Callback = { (data: [PhysaoDataPoint], error: NSError!) -> Void in
-            
             FEV1Result = data
-            
         }
         
         let PEFRCallback = { (data: [PhysaoDataPoint], error: NSError!) -> Void in
-            
             PEFRResult = data
-            
         }
         
         FVCQuery.execute(healthKitSharedInstance, onComplete: FVCCallback)

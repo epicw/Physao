@@ -10,8 +10,6 @@ import UIKit
 import Parse
 class loginViewController: UIViewController, UIScrollViewDelegate{
     
-    //@IBOutlet weak var scrollView: UIScrollView!
-    
     var userNameText = UITextField()
     var passwordText = UITextField()
     var userNameLabel = UILabel()
@@ -21,60 +19,74 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
     var registerButton = UIButton()
     var imageView = UIImageView()
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        // Establish a scrollViewn, then add some imageView, textFields, labels and buttons. 
         scrollView = UIScrollView(frame: view.bounds)
-        //scrollView.backgroundColor = UIColor.blackColor()
         scrollView.contentSize = self.view.bounds.size
-        scrollView.contentOffset = CGPoint(x: 30, y: 80)
+        scrollView.contentOffset = CGPoint(x: 0, y: 80)
         scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        scrollView.backgroundColor = UIColor.grayColor()
         
         let width = self.scrollView.frame.width
         let height = self.scrollView.frame.height
         let label_hight = height/2
         
         imageView.image = UIImage(named: "physao.png")
-        imageView.frame = CGRectMake(width/2 - 25, height/4, 105, 128)
+        imageView.frame = CGRectMake(width/2 - 25, height/4+10, 115, 115)
         
-        userNameLabel.text = "UserName:"
-        userNameLabel.frame = CGRectMake(40, label_hight, 100, 30)
+        userNameLabel.text = "UserName"
+        userNameLabel.font = UIFont(name: "systemFont", size: 18.0)
+        userNameLabel.font = UIFont.boldSystemFontOfSize(18)
+        userNameLabel.frame = CGRectMake(40, label_hight+25, 100, 30)
         
-        userNameText.frame = CGRectMake(40, label_hight + 40, width - 20, 30)
+        userNameText.frame = CGRectMake(40, label_hight + 65, width - 20, 40)
         userNameText.borderStyle = .RoundedRect
+        userNameText.placeholder = "UserName"
+        let myColor : UIColor = UIColor( red: 0.1, green: 0.1, blue:0.1, alpha: 0.5 )
+        userNameText.layer.borderColor = myColor.CGColor
         
-        passwordLabel.text = "Password:"
-        passwordLabel.frame = CGRectMake(40, label_hight + 80, 100, 30)
+        passwordLabel.text = "Password"
+        passwordLabel.font = UIFont(name: "systemFont", size: 18.0)
+        passwordLabel.font = UIFont.boldSystemFontOfSize(18)
+        passwordLabel.frame = CGRectMake(40, label_hight + 105, 100, 30)
         
-        passwordText.frame = CGRectMake(40, label_hight + 120, width - 20, 30)
+        passwordText.frame = CGRectMake(40, label_hight + 105, width - 20, 40)
         passwordText.borderStyle = .RoundedRect
+        passwordText.placeholder = "Password"
+        passwordText.layer.borderColor = myColor.CGColor
+        passwordText.secureTextEntry = true
 
-        loginButton.setTitle("Log in", forState: .Normal)
-        loginButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        loginButton.setTitleColor(UIColor.grayColor(), forState: .Highlighted)
+        loginButton.setTitle("Log In", forState: .Normal)
+        loginButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
+        loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        loginButton.setTitleColor(UIColor.blueColor(), forState: .Highlighted)
         loginButton.addTarget(self, action: Selector("loginAction:"), forControlEvents: .TouchUpInside)
-        loginButton.frame = CGRectMake(width/2 - 20, label_hight + 185, 100, 10)
+        loginButton.frame = CGRectMake(40, label_hight + 162, width-20, 40)
+        loginButton.backgroundColor = UIColor.lightGrayColor()
         
-        registerButton.setTitle("Register", forState: .Normal)
-        registerButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        registerButton.setTitleColor(UIColor.greenColor(), forState: .Highlighted)
+        registerButton.setTitle("Sign Up", forState: .Normal)
+        registerButton.titleLabel?.font = UIFont.boldSystemFontOfSize(18)
+        registerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        registerButton.setTitleColor(UIColor.blueColor(), forState: .Highlighted)
         registerButton.addTarget(self, action: Selector("RegisterAction:"), forControlEvents: .TouchUpInside)
-        registerButton.frame = CGRectMake(width/2 - 20, label_hight + 215, 100, 10)
+        registerButton.frame = CGRectMake(40, label_hight + 250, width-20, 40)
         
         self.scrollView.addSubview(imageView)
-        self.scrollView.addSubview(userNameLabel)
-        self.scrollView.addSubview(passwordLabel)
         self.scrollView.addSubview(userNameText)
         self.scrollView.addSubview(passwordText)
         self.scrollView.addSubview(loginButton)
         self.scrollView.addSubview(registerButton)
         self.view.addSubview(scrollView)
-        // Do any additional setup after loading the view, typically from a nib.
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("DismissKeyboard:"))
         view.addGestureRecognizer(tap)
-        
-        //userNameText.text = "Weiqi Wei"
-        //passwordText.text = "11"
     }
     
     func DismissKeyboard(recognizer: UITapGestureRecognizer){
@@ -93,13 +105,10 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
-        //self.deregisterFromKeyboardNotifications()
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func loginAction(sender: UIButton) {
@@ -110,53 +119,33 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
             self.presentViewController(navController, animated: true, completion: nil)
         }
         else{
-            let alertMessage = UIAlertController(title: "Alert", message: "Username or Password may be wrong.", preferredStyle: UIAlertControllerStyle.Alert)
-            
-            alertMessage.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction) in
-                print("Handle Ok logic here")
-            }))
-            
-            presentViewController(alertMessage, animated: true, completion: nil)
+            AlertMessage("Username or Password may be wrong.")
         }
     }
     @IBAction func RegisterAction(sender: AnyObject) {
         if(userNameText.text == "" || passwordText.text == ""){
-            let alertMessage = UIAlertController(title: "Alert", message: "Username or Password cannot be empty.", preferredStyle: UIAlertControllerStyle.Alert)
-            
-            alertMessage.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction) in
-                print("Handle Ok logic here")
-            }))
-            
-            presentViewController(alertMessage, animated: true, completion: nil)
+            AlertMessage("Username or Password cannot be empty.")
         }
         else{
             if UserInfoManager.getInstance().addUserInfoData(userNameText.text!, password: passwordText.text!){
-                let alertMessage = UIAlertController(title: "Alert", message: "Register successfully.", preferredStyle: UIAlertControllerStyle.Alert)
-                
-                alertMessage.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction) in
-                    print("Handle Ok logic here")
-                }))
-                
-                presentViewController(alertMessage, animated: true, completion: nil)
+                AlertMessage("Register successfully.")
             }
             else{
-                let alertMessage = UIAlertController(title: "Alert", message: "Register Unsuccessfully. User name exists", preferredStyle: UIAlertControllerStyle.Alert)
-                
-                alertMessage.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction) in
-                    print("Handle Ok logic here")
-                }))
-                
-                presentViewController(alertMessage, animated: true, completion: nil)
+                AlertMessage("Register Unsuccessfully. User name exists")
             }
         }
     }
     
-    /*override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "segueToDashBoard"{
-            let nextController = (segue.destinationViewController as! UINavigationController).topViewController as! DashBoardViewController
-            print(nextController.incomming_string)
-        }
-    }*/
+    func AlertMessage(Message: String){
+        let alertMessage = UIAlertController(title: "Alert", message: Message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertMessage.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction) in
+            print("Handle Ok logic here")
+        }))
+        
+        presentViewController(alertMessage, animated: true, completion: nil)
+    }
+    
     func registerForKeyboardNotifications ()-> Void   {
         self.scrollView.contentOffset = CGPoint(x: 30, y: 80)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
@@ -171,13 +160,10 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
         let center:  NSNotificationCenter = NSNotificationCenter.defaultCenter()
         center.removeObserver(self, name: UIKeyboardDidHideNotification, object: nil)
         center.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-        
-        
     }
     
     
     func keyboardWasShown (notification: NSNotification) {
-        //self.scrollView.contentOffset = CGPoint(x: 30, y: 80)
         if let userInfo = notification.userInfo {
             if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
                 let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height,  0.0);
@@ -185,14 +171,12 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
                 self.scrollView.contentInset = contentInset
                 self.scrollView.scrollIndicatorInsets = contentInset
                 
-                self.scrollView.contentOffset = CGPointMake(30, 0 + keyboardSize.height) //set zero instead self.scrollView.contentOffset.y
-                //self.scrollView.contentOffset = CGPoint(x: 30, y: 80) self.scrollView.contentOffset.x
+                self.scrollView.contentOffset = CGPointMake(30, 0 + keyboardSize.height)
             }
         }
     }
     
     func keyboardWillBeHidden (notification: NSNotification) {
-        //self.scrollView.contentOffset = CGPoint(x: 30, y: 80)
         if let userInfo = notification.userInfo {
             if let _: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
                 let contentInset = UIEdgeInsetsZero;
@@ -200,16 +184,14 @@ class loginViewController: UIViewController, UIScrollViewDelegate{
                 self.scrollView.contentInset = contentInset
                 self.scrollView.scrollIndicatorInsets = contentInset
                 self.scrollView.contentOffset = CGPointMake(30, self.scrollView.contentOffset.y)
-                //self.scrollView.contentOffset = CGPoint(x: 30, y: 80)
-
             }
         }
     }
     
     @IBAction func unwindFromDashBoard(segue: UIStoryboardSegue){
         self.scrollView.contentOffset = CGPoint(x: 30, y: 80)
-        //userNameText.text = ""
-        //passwordText.text = ""
+        userNameText.text = ""
+        passwordText.text = ""
     }
     
 }

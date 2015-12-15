@@ -14,30 +14,33 @@ import CoreBluetooth
 class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // MARK: Properties
+    // for the countdown timer
     let TIMERVIEW_RADIUS: CGFloat = 50
     let BORDER_WIDTH: CGFloat = 2
-    
     var timer = NSTimer()
     let timeInterval: NSTimeInterval = 0.5
     let timerStart: NSTimeInterval = 2.0
     var timerVal: NSTimeInterval = 2.0
-    
     let circleView: UIView = UIView()
     let timerLabel: UILabel = UILabel()
+    // for the animation
     var boardView = UIImageView()
     var dartView = UIImageView()
+    // reset button
     let resetButton = UIButton()
+    // scroll view
     var scrollView = UIScrollView()
     
     // bluetooth properties
     var centralManager:CBCentralManager!
     var connectingPeripheral:CBPeripheral!
     var data: [String] = [""]
-    
-    var isInhale: Bool = false // BOOL isInhale = false;
-    var isMeasuring: Bool = false // BOOL isMeasuring = false;
-    let threshold: Double = 270 // double threshold = 270;
-    var count: Int = 0 // int count = 0;
+    // some variables from Physao team
+    var isInhale: Bool = false
+    var isMeasuring: Bool = false
+    let threshold: Double = 270
+    var count: Int = 0
+
     
     // view related functions
     override func viewWillAppear(animated: Bool) {
@@ -49,20 +52,20 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         print("scanning stopped")
         super.viewWillDisappear(animated)
     }
-    // TODO: animation speed and the size need to be changed during blowing
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("Initializing central manager")
         centralManager = CBCentralManager(delegate: self, queue: nil)
         
+        // customize the scrollview
         scrollView = UIScrollView(frame: view.bounds)
-        //scrollView.backgroundColor = UIColor.blackColor()
         scrollView.contentSize = self.view.bounds.size
-        scrollView.contentOffset = CGPoint(x: 30, y: 80)
+        scrollView.contentOffset = CGPoint(x: 0, y: 80)
         scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
-        // animation: shooting a dart at a dartboard & countdown timer (Part1)
+        // animation: shooting a dart at a dartboard & countdown timer
         /* add a custom Circle view */
         circleView.frame = CGRectMake(self.view.center.x-TIMERVIEW_RADIUS, self.view.center.y+2*TIMERVIEW_RADIUS, 2*TIMERVIEW_RADIUS, 2*TIMERVIEW_RADIUS)
         circleView.layer.cornerRadius = TIMERVIEW_RADIUS
@@ -95,34 +98,24 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         self.scrollView.addSubview(resetButton)
         self.view.addSubview(scrollView)
         // Do any additional setup after loading the view.
-        //startTimer()
-        //startAnimation()
+        /*-------------------------for now, start timer and animation once going to this view, but later can cancel this setting and trigger timer and animation when user start blowing-----------------*/
+        startTimer()
+        startAnimation()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+    // countdown timer format
     func timeString(time: NSTimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = time - Double(minutes) * 60
         return String(format:"%02i:%02i",minutes,Int(seconds))
     }
     
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
-    
-    // animation: shooting a dart at a dartboard & countdown timer (Part2)
-    // first: countdown timer
-    func startTimer() { // to trigger the timer
+    /*------------------------------to start timer, can be used when user start blowing-------------------*/
+    func startTimer() {
         timerLabel.text = timeString(timerVal)
         timer = NSTimer.scheduledTimerWithTimeInterval(timeInterval
             , target: self, selector: Selector("timerDidEnd:"), userInfo: nil, repeats: true)
@@ -146,7 +139,8 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         timerLabel.text = timeString(timerVal)
     }
     
-    func startAnimation() { // to trigger the animation
+    /*------------------------to trigger the animation, can be used when user start blowing----------------*/
+    func startAnimation() {
         let path = UIBezierPath()
         path.moveToPoint(CGPoint(x: 303, y: 390)) // the current point
         path.addCurveToPoint(CGPoint(x: 122, y: 116), controlPoint1: CGPoint(x: 249, y: 305), controlPoint2: CGPoint(x: 196, y: 221))
@@ -157,23 +151,18 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         self.dartView.transform = CGAffineTransformMakeScale(1.5, 1.5)
         UIView.animateWithDuration(1.0 ,
             animations: {
-                //self.dartView.transform = CGAffineTransformIdentity
+                // the size of the dart can be changed during animation
                 self.dartView.transform = CGAffineTransformMakeScale(0.5, 0.5)
             },
             completion: { finish in
                 UIView.animateWithDuration(1.0){
-                    //self.dartView.transform = CGAffineTransformIdentity
                 }
         })
         dartView.layer.addAnimation(anim, forKey: "animate position along path")
     }
-
     
-    // TODO: trigger the timer action
-    // second: animation
-    // TODO: trigger the animation
-    
-    @IBAction func resetFunc(sender: UIButton) { // should only reset the timer? not to trigger the timer or animation?
+    /*----------------------for now, we trigger the timer and animation both using reset button, but later, once the Physao team finished the calculation part, and connect the device, they can instead trigger the timer and animation using the functions above when user starts blowing----------------------*/
+    @IBAction func resetFunc(sender: UIButton) {
         // reset timer
         resetTimer()
         startTimer()
@@ -198,16 +187,13 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         }
     }
     
-    func scan() { // serviceUUIDs as? [CBUUID]
+    func scan() {
         self.centralManager.scanForPeripheralsWithServices(nil,options: nil)
         print("scanning started\n\n\n")
     }
     
     // did discover peripheral
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        /*if RSSI.integerValue > -15 {
-        return
-        }*/
         if (peripheral.name == HMSoftname) {
             print("discovered \(peripheral.name) at \(RSSI)")
             if connectingPeripheral != peripheral {
@@ -216,7 +202,6 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
                 print("connecting to peripheral \(peripheral)")
                 centralManager.connectPeripheral(connectingPeripheral, options: nil)
             }
-            
         }
     }
     
@@ -242,7 +227,6 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         case .Connected:
             if (connectingPeripheral.services != nil) {
                 print("found")
-                //add any additional cleanup code here
             }
         default:
             return
@@ -284,7 +268,6 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
     
     // did update notification state for characteristic
     func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        // print("characteristic UUID  \(characteristic.UUID)\n")
         if let _ = error {
             print("error changing notification state \(error!.description)")
         }
@@ -306,42 +289,21 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
             print("error")
         }
         else {
-            // var data: NSMutableData = NSMutableData()
-            // let dataString = NSString(data: characteristic.value!, encoding: NSUTF8StringEncoding)
-            /*if(dataString == "EOM") {
-            print("EOM")
-            print(self.data) // to check the value received from the device
-            
-            // TODO: derive the
-            /*self.FVCRaw = FVCValue
-            self.FEV1Raw = FEV1Value
-            self.PEFRRaw = PEFRValue*/
-            
-            peripheral.setNotifyValue(false, forCharacteristic: characteristic)
-            centralManager.cancelPeripheralConnection(peripheral)
-            }
-            else {
-            self.data.appendData(characteristic.value!)
-            print("\(characteristic.value)\n")
-            // print("appendData")
-            }*/
             let nsdata: NSData = characteristic.value!
             var count = nsdata.length / sizeof(UInt8)
             var byteData = [UInt8](count: count, repeatedValue: 0)
             nsdata.getBytes(&byteData, length:count * sizeof(UInt8)) // copy nsdata to byteData
-            
-            let comb = NSData(bytes: byteData, length: 4)
-            comb.getBytes(&byteData, length: 4)
+        
             var bVal: Int = 0
-            bVal = Int(UInt32(bigEndian: UInt32(bVal))) // var bVal: Int = [[NSNumber numberWithUnsignedChar:byteData] intValue];
-            let offsetAmp: Int = 75 // int offsetAmp = 75;
-            let bValScaled: Double = 30 * sqrt(fabs(1024 - Double(offsetAmp) - pow(Double(bVal)/8.0, 2))) // double bValScaled = 30 * sqrt(fabs(1024 - offsetAmp - pow(bVal/8.0, 2)));
-            
-            print("start")
-            print(bValScaled)
+            let comb = NSData(bytes: byteData, length: 4)
+            comb.getBytes(&bVal, length: 4)
+            bVal = Int(UInt32(bigEndian: UInt32(bVal))) // var bVal: Int = [[NSNumber numberWithUnsignedChar:byteData] intValue]; (obj-c version, from Physao team)
+            let offsetAmp: Int = 75
+            let bValScaled: Double = 30 * sqrt(fabs(1024 - Double(offsetAmp) - pow(Double(bVal)/8.0, 2))) // double bValScaled = 30 * sqrt(fabs(1024 - offsetAmp - pow(bVal/8.0, 2))); (obj-c version, from Physao team)
             
             if(isMeasuring == false && bValScaled > threshold) {
                 // as soon as the user blows, it triggers the timer and the animation
+                /*-----------------for now the problem is: there is some delay between user blow and bluetooth starts receiving data, I think it's just because of this part, which is only a bluetooth module, is not fully funcationality--------------------------------*/
                 startTimer()
                 startAnimation()
                 
@@ -350,32 +312,25 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
                 isInhale = !isInhale
                 count += 1
             }
-                // After one complete inhalation or exhalation, the flow goes back below threshold
+            // After one complete inhalation or exhalation, the flow goes back below threshold
             else if(isMeasuring == true && bValScaled < threshold) {
-                //print("Test when above the threshold")
-                //print(self.data)
                 isMeasuring = false
-                // output and divide into three and save
-                // NSString* arrayText = [self.measureList componentsJoinedByString: @"| "];
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!var arrayText: String = data.joinWithSeparator("| ")
-                // TODO: divide into three: FVCValue,FEV1Value,PEFRValue !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // NSString* arrayText = [self.measureList componentsJoinedByString: @"| "]; (obj-c version, from Physao team)
+                // var arrayText: String = data.joinWithSeparator("| ") // parse the data received & calculated (swift version)
+                // TODO: divide into three: FVCValue,FEV1Value,PEFRValue (leave it to the physao team after they finished the calculating part)
+                
                 // Count reaches 2 when patient has inhaled (1) and exhaled (2)
                 // Once inhaled and exhaled, cut off bluetooth connection and save the data
                 if(count == 2) {
                     // cancel connection
                     peripheral.setNotifyValue(false, forCharacteristic: characteristic)
                     centralManager.cancelPeripheralConnection(peripheral)
-                    // [self.manager cancelPeripheralConnection:self.peripheral];
-                    // NSUserDefaults *myDefaults = [[NSUserDefaults alloc] init];
-                    // Save data text into NSDefault
-                    // [myDefaults setObject:arrayText forKey:@"flowData"];
                 }
-                
             }
             // Collect data into array until you have to save it
             if(isMeasuring == true) {
                 // Append value to measurement array
-                //self.data addObject:[NSString stringWithFormat:@"%g", bValScaled]];
+                // self.data addObject:[NSString stringWithFormat:@"%g", bValScaled]]; (obj-c version, from Physao team)
                 self.data.append(NSString(format: "%g", bValScaled) as String)
             }
         }
@@ -386,7 +341,7 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         print("didDisconnect error is \(error)")
     }
     
-    // transmit data to immediate feedback view
+    // transmit data to immediate feedback view & store in the healthkit
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
@@ -394,12 +349,8 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
         if(segue.identifier == "twoFeed") {
             if let destinationVC = segue.destinationViewController as? UINavigationController {
                 let dest = destinationVC.topViewController as! ImmediateFeedbackViewController
-                //dest!.passedValues = self.names
-                // TODO: put these three values to passedValues
-                /* = FVCValue
-                FEV1Value
-                PEFRValue*/
-                //Saving Random values to HealthKit.
+                // derive these three values (fvc, fev1, pefr) from bytedata above after calculation
+                // Saving Random values to HealthKit.
                 let now:NSDate = NSDate()
                 let fvcVal = Double(arc4random_uniform(6) + 1)
                 let fev1Val = Double(arc4random_uniform(3) + 1)
@@ -409,7 +360,6 @@ class twoSecondViewController: UIViewController, CBCentralManagerDelegate, CBPer
                 dest.fvcVal.text = String(fvcVal)
                 dest.fev1Val.text = String(fev1Val)
                 dest.pefrVal.text = String(pefrVal)
-
             }
         }
     }

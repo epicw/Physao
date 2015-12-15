@@ -11,6 +11,7 @@
 
 import UIKit
 
+// Enum for 'sample type' used as identifier for graphing. 
 enum PhysaoSampleType {
     
     case FVC
@@ -22,6 +23,7 @@ enum PhysaoSampleType {
 
 class PhysaoDataPoint: NSObject {
     
+    //MARK: Instance Variables
     var time:NSDate
     var type:PhysaoSampleType
     var sampleValue:Double
@@ -34,7 +36,7 @@ class PhysaoDataPoint: NSObject {
         
     }
     
-    
+    //MARK: Class-level (static) functions
     class func splitList(toSplit:[PhysaoDataPoint]) -> (times: [NSDate], values: [Double]){
         var valsToReturn = [Double]()
         var timesToReturn = [NSDate]()

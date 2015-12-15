@@ -15,8 +15,8 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
     
     var invitationInfo:[String] = []
     var invitationFriends:[String: Patient] = [:]
-    var add_name_from = ""
-    var add_name_to = ""
+    var add_name_from = ""             // this string is the friend who sent invitation to user
+    var add_name_to = ""               // this string is the current username
     var objectAndId:[String: String] = [:]
     var confirmList:[String] = []
     var confirmFriends:[Patient] = []
@@ -24,12 +24,10 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         getInvitationOnline()
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
@@ -42,17 +40,16 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
         cell.nameLabel.text = invitationInfo[indexPath.row]
         cell.confirmButton.tag = indexPath.row
         cell.confirmButton.addTarget(self, action: Selector("confirmAction:"), forControlEvents: .TouchUpInside)
-        
         cell.refuseButton.tag = indexPath.row
         cell.refuseButton.addTarget(self, action: Selector("refuseAction:"), forControlEvents: .TouchUpInside)
         return cell
     }
     
+    // If the user confirms the invitation, it will send a message to Parse.com and change some columns.
     @IBAction func confirmAction(sender: UIButton){
         let query = PFQuery(className: "InvitationObject")
         let index:Int = sender.tag
         let name = invitationInfo[index]
-        //UserInfoManager.getInstance().saveNewFriend(name, nameTo: add_name_to)
         self.confirmList.append(name)
         self.confirmFriends.append(invitationFriends[name]!)
         print(objectAndId[name]!)
@@ -77,6 +74,7 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
         
     }
     
+    // If the user refuses the invitation, the app will send a message to Parse.com and delete the row there.
     @IBAction func refuseAction(sender: UIButton){
         let index:Int = sender.tag
         let name = invitationInfo[index]
@@ -90,6 +88,8 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+    
+    // Get all of the invitations to the current user.
     func getInvitationOnline(){
         let query = PFQuery(className: "InvitationObject")
         query.whereKey("nameTo", equalTo: add_name_to)
@@ -104,15 +104,12 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
                         let hasAdded = item.objectForKey("hasAdded") as! String
                         let timesFrom = item.objectForKey("timesFrom") as! String
                         let untilDateFrom = item.objectForKey("untilDateFrom") as! String
-                        print(timesFrom)
-                        print(untilDateFrom)
                         
                         if(hasAdded == "0"){
                             let patient = Patient(name: fullName, times: timesFrom, date: untilDateFrom)
                             self.invitationInfo.append(fullName)
                             self.objectAndId[fullName] = item.objectId
                             self.invitationFriends[fullName] = patient
-                            print(self.invitationInfo.count)
                         }
                     }
                 }
@@ -135,6 +132,8 @@ class ShowInvitationViewController: UIViewController, UITableViewDataSource, UIT
         
     }
     
+    
+    // This is used to get back from next viewController
     @IBAction func unwindFromAddView(segue: UIStoryboardSegue){
         
     }

@@ -10,38 +10,32 @@ import UIKit
 
 class SpirometryViewController: UIViewController {
     
+    // MARK: Properties
     let twoSecondButton = UIButton()
     let sixSecondButton = UIButton()
-    // TODO: swipe view
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        
         
         let buttonWidth = self.view.frame.size.width - 20.0
         let buttonHeight = (self.view.frame.size.height - 100) / 2.0
         twoSecondButton.frame = CGRectMake(10, 80, buttonWidth, buttonHeight)
         twoSecondButton.setImage(UIImage(named: "2-second.png"), forState: UIControlState.Normal)
-        //twoSecondButton.addTarget(self, action: Selector("twoSecondAnimation:"), forControlEvents: .TouchUpInside)
-        
         
         sixSecondButton.frame = CGRectMake(twoSecondButton.frame.origin.x, twoSecondButton.frame.origin.y + twoSecondButton.frame.size.height + 10, buttonWidth, buttonHeight)
         sixSecondButton.setImage(UIImage(named: "6-second.png"), forState: UIControlState.Normal)
-        //sixSecondButton.addTarget(self, action: Selector("sixSecondAnimation:"), forControlEvents: .TouchUpInside)
         
         self.view.addSubview(twoSecondButton)
         self.view.addSubview(sixSecondButton)
         
-        // two sec
+        // swip gesture
         let swipeDown = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeDown.direction = UISwipeGestureRecognizerDirection.Down
         self.twoSecondButton.addGestureRecognizer(swipeDown)
-        // six sec
         let swipeUp = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
         swipeUp.direction = UISwipeGestureRecognizerDirection.Up
         self.sixSecondButton.addGestureRecognizer(swipeUp)
-        
+        // Do any additional setup after loading the view.
     }
     
     func respondToSwipeGesture(gesture: UIGestureRecognizer) {
@@ -53,9 +47,9 @@ class SpirometryViewController: UIViewController {
                 print("Swiped right")
             case UISwipeGestureRecognizerDirection.Down:
                 // two sec
-                // print("Swiped down")
                 // animation & fadeout
                 UIView.animateWithDuration(0.45, animations: {
+                    // the two sec image goes down until out of the bound
                     self.twoSecondButton.frame = CGRectMake(self.twoSecondButton.frame.origin.x,
                         self.view.frame.height,
                         self.twoSecondButton.frame.size.width,
@@ -63,19 +57,18 @@ class SpirometryViewController: UIViewController {
                     
                     self.sixSecondButton.fadeOut()
                     },
-                    completion: { finish in
+                    completion: { finish in    // after the completion of the animation, go to the next view
                         UIView.animateWithDuration(0.35){
                             self.performSegueWithIdentifier("segueTwoSecond", sender: self)
                         }
                 })
-                
             case UISwipeGestureRecognizerDirection.Left:
                 print("Swiped left")
             case UISwipeGestureRecognizerDirection.Up:
                 // six sec
-                // print("Swiped up")
                 // animation & fadeout
                 UIView.animateWithDuration(0.50, animations: {
+                    // the six sec image goes up until out of the bound
                     self.sixSecondButton.frame = CGRectMake(self.sixSecondButton.frame.origin.x,
                         0-self.view.frame.height,
                         self.sixSecondButton.frame.size.width,
@@ -83,7 +76,7 @@ class SpirometryViewController: UIViewController {
                     
                     self.twoSecondButton.fadeOut()
                     },
-                    completion: { finish in
+                    completion: { finish in    // after the completion of the animation, go to the next view
                         UIView.animateWithDuration(0.35){
                             self.performSegueWithIdentifier("segueSixSecond", sender: self)
                         }
@@ -99,31 +92,9 @@ class SpirometryViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
-    /*
-    @IBAction func twoSecondAnimation(sender: UIButton){
-    let twoSecondView = self.storyboard?.instantiateViewControllerWithIdentifier("twoSecondView") as! twoSecondViewController
-    let navController = UINavigationController(rootViewController: twoSecondView)
-    self.presentViewController(navController, animated: true, completion: nil)
-    
-    }
-    
-    @IBAction func sixSecondAnimation(sender: UIButton){
-    let sixSecondView = self.storyboard?.instantiateViewControllerWithIdentifier("sixSecondView") as! SixSecondViewController
-    let navController = UINavigationController(rootViewController: sixSecondView)
-    self.presentViewController(navController, animated: true, completion: nil)
-    }
-    */
+
     @IBAction func unwindFromTwoSecond(segue: UIStoryboardSegue){
+        // as the button fades out before, show it now again
         let buttonWidth = self.view.frame.size.width - 20.0
         let buttonHeight = (self.view.frame.size.height - 100) / 2.0
         twoSecondButton.frame = CGRectMake(10, 80, buttonWidth, buttonHeight)
@@ -136,6 +107,7 @@ class SpirometryViewController: UIViewController {
     }
     
     @IBAction func unwindFromSixSecond(segue: UIStoryboardSegue){
+        // as the button fades out before, show it now again
         let buttonWidth = self.view.frame.size.width - 20.0
         let buttonHeight = (self.view.frame.size.height - 100) / 2.0
         twoSecondButton.frame = CGRectMake(10, 80, buttonWidth, buttonHeight)
@@ -148,6 +120,7 @@ class SpirometryViewController: UIViewController {
     }
     
     @IBAction func unwindFromImmediateFeedback(segue: UIStoryboardSegue){
+        // as the button fades out before, show it now again
         let buttonWidth = self.view.frame.size.width - 20.0
         let buttonHeight = (self.view.frame.size.height - 100) / 2.0
         twoSecondButton.frame = CGRectMake(10, 80, buttonWidth, buttonHeight)

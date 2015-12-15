@@ -31,18 +31,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("2FJcyZIv8WlvXCokXRKhUPfKRVH3kl1TLasEW8GE",
             clientKey: "cpJr5DgL3k1lBDbGJCfGG3wA32hTg5elIVvaWYa4")
         
-        // notification
+        // for notification part
         print("start \(__FUNCTION__)")
         NSLog("%@ %@", "\(__FUNCTION__)", "\(launchOptions)")
         
         if let n = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
-            delay(0.5) {
+            delay(0.1) {
                 self.doAlert(n)
             }
         }
-        
         print("end \(__FUNCTION__)")
-        
         return true
     }
     

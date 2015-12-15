@@ -29,6 +29,7 @@ class PhysaoQuery: NSObject {
         
     }
     
+    //MARK: Instance Methods   
     func execute(store: HKHealthStore, onComplete: ([PhysaoDataPoint], NSError!) -> Void) -> Void {
         
         // Sample type for query
@@ -40,6 +41,8 @@ class PhysaoQuery: NSObject {
         // Sort desriptor for query, to get results in descending order of date.
         let sorter = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false);
         
+        // Callback function to extract meaningful results from list of HKSample objects
+        // returned by HealthKit Query
         let callBack = { (sampleQuery:HKSampleQuery, results:[HKSample]?, err:NSError? ) -> Void in
             
             if err != nil {
@@ -67,8 +70,7 @@ class PhysaoQuery: NSObject {
         let predicate = HKQuery.predicateForSamplesWithStartDate(self.startDate, endDate: self.endDate, options: .None)
         
         
-        // TODO: Remove unnecessary limit if possible
-        let limit = 1000
+        let limit = 1000 // In order not to graph too many values
         
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sorter], resultsHandler: callBack)
         
@@ -77,6 +79,8 @@ class PhysaoQuery: NSObject {
     }
     
     
+    // Given the 'type' provided in the constructor (self.type) 
+    // return the matching HealthKit 'type' and unit objects. 
     func selectType() -> (HKQuantityType, HKUnit) {
         var sampleType:HKQuantityType
         var unit:HKUnit
@@ -99,6 +103,7 @@ class PhysaoQuery: NSObject {
         return (sampleType, unit)
     }
     
+    //MARK: Class-level functions
     // Both lists should be of the same length, and their source should be from a PhysaoQuery.execute() call
     // First input is numerator of 'ratio' (FEV1)
     // Second input is denominator of 'ratio' (FVC)

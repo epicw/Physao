@@ -11,10 +11,8 @@ import UIKit
 class Util: NSObject {
     
     class func getPath(fileName: String) -> String {
-        
         let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
         let fileURL = documentsURL.URLByAppendingPathComponent(fileName)
-        
         return fileURL.path!
     }
     
@@ -23,11 +21,8 @@ class Util: NSObject {
         print(dbPath)
         let fileManager = NSFileManager.defaultManager()
         if !fileManager.fileExistsAtPath(dbPath) {
-            
             let documentsURL = NSBundle.mainBundle().resourceURL
             let fromPath = documentsURL!.URLByAppendingPathComponent(fileName as String)
-            
-            print(fromPath.path!)
             
             var error : NSError? = nil
             do {
@@ -39,29 +34,7 @@ class Util: NSObject {
             if error == nil{
                 print("database does not copy successfully")
             }
-           /* let alert: UIAlertView = UIAlertView()
-            if (error != nil) {
-                alert.title = "Error Occured"
-                alert.message = error?.localizedDescription
-            } else {
-                alert.title = "Successfully Copy"
-                alert.message = "Your database copy successfully"
-            }
-            alert.delegate = nil
-            alert.addButtonWithTitle("Ok")
-            alert.show()*/
         }
     }
-    
-    /*class func invokeAlertMethod(strTitle: NSString, strBody: NSString, delegate: AnyObject?)
-    {
-        var alert: UIAlertView = UIAlertView()
-        alert.message = strBody as String
-        alert.title = strTitle as String
-        alert.delegate = delegate
-        alert.addButtonWithTitle("Ok")
-        alert.show()
-    }*/
-    
     
 }

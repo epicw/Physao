@@ -9,7 +9,7 @@
 import UIKit
 import Charts
 
-var monthInfo:[Int: Int] = [1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31]
+var monthInfo:[Int: Int] = [1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31] // Month and its corresponding days
 
 class HistoryDataViewController: UIViewController {
     
@@ -42,11 +42,10 @@ class HistoryDataViewController: UIViewController {
     var HK_fev1Array:[Double] = [Double]()
     var HK_pefrArray:[Double] = [Double]()
     var HK_ratioArray:[Double] = [Double]()
+    var userName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
         
         ChooseType.selectedSegmentIndex = 0
         
@@ -57,7 +56,6 @@ class HistoryDataViewController: UIViewController {
             monthInfo[2] = 29
         }
         
-        (dateArray, fvc, fev1) = UserInfoManager.getInstance().getAllDate()
         (HK_FVC, HK_FEV1, HK_PEFR, HK_Ratio) = UserInfoManager.getHKData()
         
         (HK_dateArray, HK_fvcArray) = PhysaoDataPoint.splitList(HK_FVC)
@@ -66,32 +64,22 @@ class HistoryDataViewController: UIViewController {
         HK_Ratio = PhysaoQuery.buildRatioList(HK_FEV1, list2: HK_FVC)
         HK_ratioArray = PhysaoDataPoint.extractVals(HK_Ratio)
         
-        print(fvc.count)
-        print(dateArray.count)
-        //setChart(stringArrayFromDateArray(HK_dateArray), values: HK_fvcArray)
-       
-        //setChart(self.discardYearInfo(dateArray), values: fvc)
-        
-        let historyDate = UserInfoManager.getInstance().getUserHistoryData("Weiqi Wei")
-        
-        //var (dates, fvc_Y, fev1_Y) = self.findTargetDataSet(historyDate, mode: 0)
-        
-        //dates = self.discardYearInfo(dates)
-        //setChart(dates, values: fvc_Y)
-        //printStringArray(dates, doubleArray1: fvc_Y, doubleArray2: fev1_Y)
+        let historyDate = UserInfoManager.getInstance().getUserHistoryData(userName)
 
-        (days, fvcForDays, fev1ForDays) = self.findTargetDataSet(historyDate, mode: 0)
+        // load all of data first, so these data does not need to load again
+        (days, fvcForDays, fev1ForDays) = self.findTargetDataSet(historyDate, mode: 0) // mode 0 means last 7 days
         printStringArray(days, doubleArray1: fvcForDays, doubleArray2: fev1ForDays)
         
-        (weeks, fvcForWeeks, fev1ForWeeks) = self.findTargetDataSet(historyDate, mode: 1)
+        (weeks, fvcForWeeks, fev1ForWeeks) = self.findTargetDataSet(historyDate, mode: 1) // mode 1 means last 21 days
         printStringArray(weeks, doubleArray1: fvcForWeeks, doubleArray2: fev1ForWeeks)
 
-        (months, fvcForMonths, fev1ForMonths) = self.findTargetDataSet(historyDate, mode: 2)
+        (months, fvcForMonths, fev1ForMonths) = self.findTargetDataSet(historyDate, mode: 2) // mode 2 means last 3 months
         printStringArray(months, doubleArray1: fvcForMonths, doubleArray2: fev1ForMonths)
 
         setChart(self.discardYearInfo(days), values: fvcForDays, mode: 0)
     }
     
+    // Change an array of type NSDate to String
     func stringArrayFromDateArray(dates:[NSDate]) -> [String] {
         var stringList:[String] = [String]()
         
@@ -110,9 +98,9 @@ class HistoryDataViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    // This is some conditions when press the two segmented controller
     @IBAction func ChangeGraph(sender: AnyObject) {
         if(sender.selectedSegmentIndex == 0 && ChooseTime.selectedSegmentIndex == 0){
             setChart(self.discardYearInfo(days), values: fvcForDays, mode: 0)
@@ -139,6 +127,7 @@ class HistoryDataViewController: UIViewController {
         }
     }
     
+    // This is some conditions when press the two segmented controller
     @IBAction func ChangeMode(sender: AnyObject) {
         if(sender.selectedSegmentIndex == 0 && ChooseType.selectedSegmentIndex == 0){
             setChart(self.discardYearInfo(days), values: fvcForDays, mode: 0)
@@ -150,7 +139,6 @@ class HistoryDataViewController: UIViewController {
         
         else if(sender.selectedSegmentIndex == 1 && ChooseType.selectedSegmentIndex == 0){
             setChart(self.discardYearInfo(weeks), values: fvcForWeeks, mode: 1)
-            //print(fvcForWeeks[fvcForWeeks.count - 1])
         }
         
         else if(sender.selectedSegmentIndex == 1 && ChooseType.selectedSegmentIndex == 1){
@@ -159,7 +147,6 @@ class HistoryDataViewController: UIViewController {
         
         else if(sender.selectedSegmentIndex == 2 && ChooseType.selectedSegmentIndex == 0){
             setChart(self.discardYearInfo(months), values: fvcForMonths, mode: 2)
-            //print(fvcForMonths[fvcForMonths.count - 1])
         }
         
         else if(sender.selectedSegmentIndex == 2 && ChooseType.selectedSegmentIndex == 1){
@@ -167,6 +154,7 @@ class HistoryDataViewController: UIViewController {
         }
     }
     
+    // This is the function to draw graph
     func setChart(dataPoints: [String], values: [Double], mode: Int) {
         lineChart.noDataText = "You need to provide data for the chart."
         
@@ -196,34 +184,17 @@ class HistoryDataViewController: UIViewController {
         
     }
     
-    
-    /*func setBarChart(dataPoints: [String], values: [Double]) {
-        barChartView.noDataText = "You need to provide data for the chart."
-        
-        var dataEntries: [BarChartDataEntry] = []
-        
-        for i in 0..<dataPoints.count {
-            let dataEntry = BarChartDataEntry(value: values[i], xIndex: i)
-            dataEntries.append(dataEntry)
-        }
-        
-        let chartDataSet = BarChartDataSet(yVals: dataEntries, label: "Units Sold")
-        let chartData = BarChartData(xVals: months, dataSet: chartDataSet)
-        barChartView.data = chartData
-    }*/
-    
     func getCurrentDate() -> String{
         let date = NSDate()
         let formatter = NSDateFormatter()
         let dateFormat = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale(localeIdentifier: "en-US"))
-        //gbDateFormat now contains an optional string "dd/MM/yyyy"
         formatter.dateFormat = dateFormat
         let dateString = formatter.stringFromDate(date)
         return dateString
     }
     
+    // Get day in Integer type from DD/MM/YYYY
     func getDay(date: String) -> Int{
-        //let day = date[date.startIndex.advancedBy(3)...date.startIndex.advancedBy(4)]
         var i = 0
         var count = 0
         var day: String = ""
@@ -244,8 +215,8 @@ class HistoryDataViewController: UIViewController {
         return Int(day)!
     }
     
+    // Get month in Integer type from DD/MM/YYYY
     func getMonth(date: String) -> Int{
-        //let month = date[date.startIndex...date.startIndex.advancedBy(1)]
         var i = 0
         var month: String = ""
         while i < date.characters.count{
@@ -258,11 +229,13 @@ class HistoryDataViewController: UIViewController {
         return Int(month)!
     }
     
+    // Get year in Integer type from DD/MM/YYYY
     func getYear(date: String) -> Int{
         let year = date[date.startIndex.advancedBy(6)...date.startIndex.advancedBy(9)]
         return Int(year)!
     }
     
+    // Find the target dataSet.
     func findTargetDataSet(historyData:[String: userData], mode: Int) -> ([String], [Double], [Double]){
         var resultYFVC:[Double] = []
         var resultYFEV1:[Double] = []
@@ -290,6 +263,8 @@ class HistoryDataViewController: UIViewController {
         return (dates, resultYFVC, resultYFEV1)
     }
     
+    
+    // Find the date set for each mode.
     func findDateSet(mode: Int) -> [String]{
         let date = self.getCurrentDate()
         let Month = self.getMonth(date)
@@ -332,6 +307,7 @@ class HistoryDataViewController: UIViewController {
         return result
     }
 
+    // Construct the string for each day in one month
     func searchMonth(month: Int, startDay: Int, endDay: Int, year: Int) -> [String]{
         var i = startDay
         var result:[String] = []
@@ -343,6 +319,8 @@ class HistoryDataViewController: UIViewController {
         return result
     }
     
+    
+    //Construct the string for each day in mode 0.
     func searchLastDays(var startDay: Int, month: Int, day: Int, year: Int) -> [String]{
         var result:[String] = []
         if startDay > 0{
@@ -386,6 +364,8 @@ class HistoryDataViewController: UIViewController {
         }
     }
     
+    
+    // Delete year info from DD/MM/YYYY to DD/MM
     func discardYearInfo(dates:[String]) -> [String]{
         var result: [String] = []
         for date in dates{

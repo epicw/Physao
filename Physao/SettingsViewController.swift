@@ -12,10 +12,10 @@ class SettingsViewController: UIViewController {
     
     // MARK: Properties
     let categoryIdentifier = "blow"
-    
-    let notifyPicker = UIDatePicker()
+    let notifyPicker = UIDatePicker()  // time picker
     let saveButton = UIButton()
-    //var scrollView = UIScrollView()
+    let showLabel = UILabel()  // help user to see that they successfully set the notifications
+    var scrollView = UIScrollView()
     
     @IBAction func saveTime(sender: AnyObject) {
         self.registerMyNotification()
@@ -33,14 +33,13 @@ class SettingsViewController: UIViewController {
                 }
             }
         }
-        
         let types : UIUserNotificationType = [.Alert, .Sound]
         // if we want custom actions in our alert, we must create them when we register
         let category = UIMutableUserNotificationCategory()
         category.identifier = self.categoryIdentifier // will need this at notification creation time!
         let action1 = UIMutableUserNotificationAction()
-        action1.identifier = "maybe later"
-        action1.title = "Maybe later" // user will see this
+        action1.identifier = "sounds good"
+        action1.title = "Sounds good" // user will see this
         action1.destructive = false // the default, I'm just setting it to call attention to its existence
         action1.activationMode = .Foreground // if .Background, app just stays in the background! cool
         // if .Background, should also set authenticationRequired to say what to do from lock screen
@@ -83,43 +82,59 @@ class SettingsViewController: UIViewController {
     }
     
     func createLocalNotification() {
+        
+        UIApplication.sharedApplication().cancelAllLocalNotifications() // cancel all the previous notifications, in case previous notifications still work, which is annoying
+        
         print("creating local notification")
+        showLabel.fadeIn() // the label show for a second to indicate that notification has been created successfully
+        showLabel.text = "Create Completed"
+        showLabel.textColor = UIColor.blueColor()
+        showLabel.font = UIFont(name: "systemFont", size: 18.0)
+        showLabel.font = UIFont.boldSystemFontOfSize(18)
+        showLabel.fadeOut()
+        
         let note = UILocalNotification()
         note.alertBody = "Time to blow!"
         note.category = self.categoryIdentifier // causes Options button to spring magically to life in alert
         // Options button will offer Open, action buttons, Close
         note.fireDate = notifyPicker.date
         note.soundName = UILocalNotificationDefaultSoundName
-        // note.repeatInterval = NSCalendarUnit.Day
+        note.repeatInterval = NSCalendarUnit.Day // notify every day
         UIApplication.sharedApplication().scheduleLocalNotification(note)
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /*scrollView = UIScrollView(frame: view.bounds)
-        //scrollView.backgroundColor = UIColor.blackColor()
+        // customize the scroll view
+        scrollView = UIScrollView(frame: view.bounds)
         scrollView.contentSize = self.view.bounds.size
-        scrollView.contentOffset = CGPoint(x: 30, y: 80)
-        scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]*/
+        scrollView.contentOffset = CGPoint(x: 0, y: 80)
+        scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         // customize the picker and button
+        notifyPicker.datePickerMode = UIDatePickerMode.Time // not show the day, only show the hour and minute
         let pickerWidth = self.view.frame.size.width
         let pickerHeight = self.view.frame.size.height / 2
         notifyPicker.frame = CGRectMake(0, 100, pickerWidth, pickerHeight)
-        self.view.addSubview(notifyPicker)
+        self.scrollView.addSubview(notifyPicker)
         
         let buttonX = self.view.center.x - 80
         let buttonY = 100 + pickerHeight
         let buttonWidth = CGFloat(160)
         let buttonHeight = CGFloat(130)
         saveButton.setTitle("Save", forState: UIControlState.Normal)
+        saveButton.titleLabel?.font = UIFont.boldSystemFontOfSize(20)
         saveButton.backgroundColor = UIColor.whiteColor()
         saveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         saveButton.frame = CGRectMake(buttonX, buttonY, buttonWidth, buttonHeight)
         saveButton.addTarget(self, action: Selector("saveTime:"), forControlEvents: .TouchUpInside)
-        self.view.addSubview(saveButton)
-        //self.view.addSubview(scrollView)
+        self.scrollView.addSubview(saveButton)
+        // the label
+        showLabel.frame = CGRectMake(buttonX-4, buttonY+80, buttonWidth+8, buttonHeight/2-5)
+        self.scrollView.addSubview(showLabel)
+        self.view.addSubview(scrollView)
         // Do any additional setup after loading the view.
     }
     
@@ -127,16 +142,5 @@ class SettingsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
     
 }

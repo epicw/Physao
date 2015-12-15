@@ -54,7 +54,6 @@
 		9679D4B31BE146EC0062C7C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9679D4B11BE146EC0062C7C2 /* LaunchScreen.storyboard */; };
 		9679D4BE1BE146EC0062C7C2 /* PhysaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9679D4BD1BE146EC0062C7C2 /* PhysaoTests.swift */; };
 		9679D4C91BE146EC0062C7C2 /* PhysaoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9679D4C81BE146EC0062C7C2 /* PhysaoUITests.swift */; };
-		96BB6A501BE9C51500BC86FC /* PhysaoCodingGuidelines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BB6A4F1BE9C51500BC86FC /* PhysaoCodingGuidelines.swift */; };
 		96BB6A521BE9C93C00BC86FC /* PhysaoSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BB6A511BE9C93C00BC86FC /* PhysaoSample.swift */; };
 		96BB6A541BE9C95200BC86FC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BB6A531BE9C95200BC86FC /* HealthKit.framework */; };
 		96C18F0A1BE9DAB500B172EE /* PhysaoQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C18F091BE9DAB500B172EE /* PhysaoQuery.swift */; };
@@ -151,7 +150,6 @@
 		9679D4C41BE146EC0062C7C2 /* PhysaoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhysaoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9679D4C81BE146EC0062C7C2 /* PhysaoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysaoUITests.swift; sourceTree = "<group>"; };
 		9679D4CA1BE146EC0062C7C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		96BB6A4F1BE9C51500BC86FC /* PhysaoCodingGuidelines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysaoCodingGuidelines.swift; sourceTree = "<group>"; };
 		96BB6A511BE9C93C00BC86FC /* PhysaoSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysaoSample.swift; sourceTree = "<group>"; };
 		96BB6A531BE9C95200BC86FC /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		96BB6A551BE9C95200BC86FC /* Physao.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Physao.entitlements; sourceTree = "<group>"; };
@@ -222,11 +220,11 @@
 		3E09601B1C0D20D400AAB153 /* Blow Part */ = {
 			isa = PBXGroup;
 			children = (
-				3E41FC651BFC1DCA00C8FCD8 /* SixSecondViewController.swift */,
-				3EA8DBA11BFBF544009BA562 /* SpirometryViewController.swift */,
-				3E62B8D11BFED1580086CF2E /* twoSecondViewController.swift */,
-				302C66791C0BB1C50025FBC5 /* CommonBluetooth.swift */,
 				3E09601F1C0E030A00AAB153 /* UIViewExtensions.swift */,
+				3EA8DBA11BFBF544009BA562 /* SpirometryViewController.swift */,
+				302C66791C0BB1C50025FBC5 /* CommonBluetooth.swift */,
+				3E62B8D11BFED1580086CF2E /* twoSecondViewController.swift */,
+				3E41FC651BFC1DCA00C8FCD8 /* SixSecondViewController.swift */,
 				3E41FC691BFC210000C8FCD8 /* ImmediateFeedbackViewController.swift */,
 			);
 			name = "Blow Part";
@@ -276,12 +274,12 @@
 		3E8394B11C0A4E4B005DEF2C /* Social Part */ = {
 			isa = PBXGroup;
 			children = (
-				3E8394AB1C0A4DFE005DEF2C /* InvitationTableViewCell.swift */,
-				3E8394AD1C0A4E1E005DEF2C /* ShowInvitationViewController.swift */,
 				3E8394AF1C0A4E40005DEF2C /* FriendsListViewController.swift */,
 				3E8394B21C0A4ECC005DEF2C /* FriendsTableViewCell.swift */,
-				3E8394D31C0A549B005DEF2C /* SendInvitationTableViewCell.swift */,
+				3E8394AD1C0A4E1E005DEF2C /* ShowInvitationViewController.swift */,
+				3E8394AB1C0A4DFE005DEF2C /* InvitationTableViewCell.swift */,
 				3E8394B71C0A4F37005DEF2C /* SearchFriendsViewController.swift */,
+				3E8394D31C0A549B005DEF2C /* SendInvitationTableViewCell.swift */,
 				3E8394F21C0B7951005DEF2C /* Patient.swift */,
 			);
 			name = "Social Part";
@@ -335,16 +333,15 @@
 				3E62B8B01BFE66840086CF2E /* UserInfo.sqlite */,
 				9679D4AC1BE146EC0062C7C2 /* Main.storyboard */,
 				3E8394D51C0A5508005DEF2C /* Login and DashBoard */,
-				3E8394B11C0A4E4B005DEF2C /* Social Part */,
-				3E62B8A41BFE36B30086CF2E /* Model */,
 				3E09601C1C0D211500AAB153 /* Data and Settings */,
 				3E09601B1C0D20D400AAB153 /* Blow Part */,
+				3E8394B11C0A4E4B005DEF2C /* Social Part */,
+				3E62B8A41BFE36B30086CF2E /* Model */,
 				3E62B88F1BFE2E050086CF2E /* fmdb */,
+				9679D4B41BE146EC0062C7C2 /* Info.plist */,
 				9679D4AF1BE146EC0062C7C2 /* Assets.xcassets */,
 				96BB6A551BE9C95200BC86FC /* Physao.entitlements */,
-				9679D4B41BE146EC0062C7C2 /* Info.plist */,
 				9679D4B11BE146EC0062C7C2 /* LaunchScreen.storyboard */,
-				96BB6A4F1BE9C51500BC86FC /* PhysaoCodingGuidelines.swift */,
 				3E62B8A01BFE2EFE0086CF2E /* Physao-Bridging-Header.h */,
 			);
 			path = Physao;
@@ -566,7 +563,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E62B8A61BFE37C30086CF2E /* UserInfo.swift in Sources */,
-				96BB6A501BE9C51500BC86FC /* PhysaoCodingGuidelines.swift in Sources */,
 				302C66811C0C135F0025FBC5 /* PhysaoDataPoint.swift in Sources */,
 				3E62B8A81BFE38870086CF2E /* UserInfoManager.swift in Sources */,
 				3E62B8A21BFE35F70086CF2E /* Util.swift in Sources */,

@@ -15,8 +15,6 @@ class ImmediateFeedbackViewController: UIViewController {
     var neutralView = UIImageView()
     var sadView = UIImageView()
     
-    //var passedValues =
-    
     var fvcLabel = UILabel()
     var fvcVal = UILabel()
     var fev1Label = UILabel()
@@ -24,16 +22,17 @@ class ImmediateFeedbackViewController: UIViewController {
     var pefrLabel = UILabel()
     var pefrVal = UILabel()
     var scrollView = UIScrollView()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // customize the scrollview
         scrollView = UIScrollView(frame: view.bounds)
-        //scrollView.backgroundColor = UIColor.blackColor()
         scrollView.contentSize = self.view.bounds.size
-        scrollView.contentOffset = CGPoint(x: 30, y: 80)
+        scrollView.contentOffset = CGPoint(x: 0, y: 80)
         scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        
+        // three images
         let smileImage = UIImage(named: "smile.png")
         let neutralImage = UIImage(named: "neutral.png")
         let sadImage = UIImage(named: "sad.png")
@@ -50,16 +49,13 @@ class ImmediateFeedbackViewController: UIViewController {
         // display three values
         fvcLabel.frame = CGRectMake(self.view.center.x-120, self.view.center.y+80, 60, 20)
         fvcLabel.text = "FVC:"
-        fvcVal.frame = CGRectMake(self.view.center.x-40, self.view.center.y+80, 90, 20)
-        //fvcVal.backgroundColor = UIColor.blackColor()
+        fvcVal.frame = CGRectMake(self.view.center.x-20, self.view.center.y+80, 90, 20)
         fev1Label.frame = CGRectMake(self.view.center.x-120, self.view.center.y+115, 60, 20)
         fev1Label.text = "FEV1:"
-        fev1Val.frame = CGRectMake(self.view.center.x-40, self.view.center.y+115, 90, 20)
-        //fev1Val.backgroundColor = UIColor.blackColor()
+        fev1Val.frame = CGRectMake(self.view.center.x-20, self.view.center.y+115, 90, 20)
         pefrLabel.frame = CGRectMake(self.view.center.x-120, self.view.center.y+150, 60, 20)
         pefrLabel.text = "PEFR:"
-        pefrVal.frame = CGRectMake(self.view.center.x-40, self.view.center.y+150, 90, 20)
-        //pefrVal.backgroundColor = UIColor.blackColor()
+        pefrVal.frame = CGRectMake(self.view.center.x-20, self.view.center.y+150, 90, 20)
         self.scrollView.addSubview(fvcLabel)
         self.scrollView.addSubview(fev1Label)
         self.scrollView.addSubview(pefrLabel)
@@ -77,22 +73,8 @@ class ImmediateFeedbackViewController: UIViewController {
     
     
     override func viewWillAppear(animated: Bool) {
-        //passedValues
-        //fvcVal.text =
-        //fev1Val.text =
-        //pefrVal.text =
-        // TODO: According to the fvc, fev1, and pefr to decide whether it's a smile face, neutral face, or sad face
-        self.scrollView.addSubview(smileView) // by default
+        // According to the fvc, fev1, and pefr transmitted from the blow mode view controller to decide whether it's a smile face, neutral face, or sad face (Physao team will do those calculation)
+        self.scrollView.addSubview(smileView) // by default for now
     }
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
     
 }

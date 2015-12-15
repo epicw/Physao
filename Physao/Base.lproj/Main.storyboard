@@ -20,7 +20,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="d8t-OH-Gzn">
-                        <barButtonItem key="leftBarButtonItem" title="log out" id="ywg-RE-05n">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="ywg-RE-05n">
+                            <color key="tintColor" red="1" green="0.081422308593617876" blue="0.021069042470737487" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="Esr-Ai-7tu" kind="unwind" unwindAction="unwindFromDashBoard:" id="FKq-hI-OtH"/>
                             </connections>
@@ -38,7 +39,7 @@
             </objects>
             <point key="canvasLocation" x="2742" y="1130"/>
         </scene>
-        <!--Friends List View Controller-->
+        <!--Friends List-->
         <scene sceneID="Iel-yb-ALv">
             <objects>
                 <viewController storyboardIdentifier="FriendsView" id="GX5-TC-QHn" customClass="FriendsListViewController" customModule="Physao" customModuleProvider="target" sceneMemberID="viewController">
@@ -62,22 +63,36 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUU-hb-Nxj">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uUU-hb-Nxj">
                                                     <rect key="frame" x="20" y="8" width="91" height="33"/>
                                                     <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="91" id="Pfg-aV-T7h"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yjp-S4-88t">
-                                                    <rect key="frame" x="119" y="9" width="184" height="31"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yjp-S4-88t">
+                                                    <rect key="frame" x="110" y="9" width="193" height="31"/>
                                                     <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="193" id="OD3-1v-Ksj"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <animations/>
+                                            <constraints>
+                                                <constraint firstItem="yjp-S4-88t" firstAttribute="top" secondItem="4uM-yF-9zg" secondAttribute="topMargin" constant="1" id="2Yr-gv-3Xm"/>
+                                                <constraint firstItem="uUU-hb-Nxj" firstAttribute="leading" secondItem="4uM-yF-9zg" secondAttribute="leadingMargin" constant="12" id="CmX-tE-qUz"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="yjp-S4-88t" secondAttribute="bottom" constant="-4.5" id="DCH-Xv-Cc7"/>
+                                                <constraint firstItem="yjp-S4-88t" firstAttribute="leading" secondItem="4uM-yF-9zg" secondAttribute="leading" constant="110" id="G8K-Q9-wcW"/>
+                                                <constraint firstItem="uUU-hb-Nxj" firstAttribute="top" secondItem="4uM-yF-9zg" secondAttribute="topMargin" id="LH9-Yr-5Kq"/>
+                                                <constraint firstItem="yjp-S4-88t" firstAttribute="centerY" secondItem="uUU-hb-Nxj" secondAttribute="centerY" id="Obd-RT-RM9"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
@@ -95,8 +110,9 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="fEk-9F-Jmd">
+                    <navigationItem key="navigationItem" title="Friends List" id="fEk-9F-Jmd" colorLabel="IBBuiltInLabel-Blue">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="WDN-9C-RpM">
+                            <color key="tintColor" red="0.039405236448018521" green="0.08217019578793229" blue="0.4702888257575758" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="608-hT-z7a" kind="unwind" unwindAction="unwindFromSocial:" id="vys-XZ-IAk"/>
                             </connections>
@@ -132,11 +148,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="iKW-c4-UdU">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="5Pd-DT-5t2">
+                            <color key="tintColor" red="0.036991562846444788" green="0.0525913517458233" blue="0.4702888257575758" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="KGa-U8-o7x" kind="unwind" unwindAction="unwindFromSettings:" id="XIx-Rd-9yH"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="6Ik-To-Uwm">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="KGa-U8-o7x" kind="unwind" unwindAction="unwindFromSettings:" id="K3D-dD-3bw"/>
                             </connections>
@@ -164,6 +182,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="NbS-K8-aAc">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="esa-R4-GJD">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="0Px-kP-Tzg" kind="unwind" unwindAction="unwindFromSpirometry:" id="FEx-7l-kY8"/>
                             </connections>
@@ -195,11 +214,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="0Qo-Bd-jPe">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AF9-76-NYT">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="5m1-KG-Lj1" kind="unwind" unwindAction="unwindFromTwoSecond:" id="Laf-6g-JBG"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="P6r-po-ddd">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="PJA-Sk-qXZ" kind="presentation" identifier="twoFeed" id="93f-SP-iAM"/>
                             </connections>
@@ -227,11 +248,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="fA8-oq-IrW">
                         <barButtonItem key="leftBarButtonItem" title="Blow Again" id="brO-YD-SsM">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="nOh-Kx-ReP" kind="unwind" unwindAction="unwindFromImmediateFeedback:" id="RJQ-Pl-Z46"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="History Data" id="3mg-dJ-0DS">
+                        <barButtonItem key="rightBarButtonItem" title="Historical Data" id="3mg-dJ-0DS">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="Ah4-Ab-NL9" kind="show" id="pHb-T6-zlV"/>
                             </connections>
@@ -343,6 +366,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="jZi-Qx-are">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="Hj9-lx-uRE">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="mkW-6Z-AdN" kind="unwind" unwindAction="unwindFromHistoryData:" id="cOq-5K-3qM"/>
                             </connections>
@@ -394,11 +418,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="vD4-bF-wKM">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="HNF-b9-hH0">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="gBh-lC-Muu" kind="unwind" unwindAction="unwindFromSixSecond:" id="4P9-tx-Lgp"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="Y6i-6S-jx1">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="PJA-Sk-qXZ" kind="presentation" identifier="sixFeed" id="7QK-bX-rlj"/>
                             </connections>
@@ -408,7 +434,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A21-BS-GuD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gBh-lC-Muu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="7005" y="514"/>
+            <point key="canvasLocation" x="6997" y="882"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VoA-LC-dog">
@@ -467,7 +493,7 @@
             </objects>
             <point key="canvasLocation" x="3670" y="910"/>
         </scene>
-        <!--Show Invitation View Controller-->
+        <!--Invitations list-->
         <scene sceneID="Kmf-QS-U31">
             <objects>
                 <viewController id="EDq-WS-lZb" customClass="ShowInvitationViewController" customModule="Physao" customModuleProvider="target" sceneMemberID="viewController">
@@ -488,7 +514,7 @@
                                         <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eow-ii-4xi" id="Gqm-Mx-vyj">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rDm-ln-2ou">
@@ -552,8 +578,9 @@
                             <constraint firstItem="sMk-Jy-y7S" firstAttribute="top" secondItem="Y9G-yd-lUA" secondAttribute="bottom" id="zz7-VH-C1x"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="efx-Fg-4U1">
+                    <navigationItem key="navigationItem" title="Invitations list" id="efx-Fg-4U1">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="sqY-JE-LYn">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="zTX-k4-tbi" kind="unwind" unwindAction="unwindFromInvitation:" id="uCq-de-ZkC"/>
                             </connections>
@@ -573,7 +600,7 @@
             </objects>
             <point key="canvasLocation" x="5998" y="2375"/>
         </scene>
-        <!--Search Friends View Controller-->
+        <!--Search friends-->
         <scene sceneID="Ria-y6-Jwh">
             <objects>
                 <viewController id="QIb-X1-LfA" customClass="SearchFriendsViewController" customModule="Physao" customModuleProvider="target" sceneMemberID="viewController">
@@ -659,8 +686,9 @@
                             <constraint firstItem="bkX-e1-wKD" firstAttribute="leading" secondItem="nwG-ge-0zD" secondAttribute="leading" id="zPQ-MX-tba"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="D5E-uK-fHI">
+                    <navigationItem key="navigationItem" title="Search friends" id="D5E-uK-fHI">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="LZx-rF-4ny">
+                            <color key="tintColor" red="0.03699156285" green="0.052591351750000001" blue="0.47028882579999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="nhk-Tv-JrK" kind="unwind" unwindAction="unwindFromAddView:" id="anr-be-U8M"/>
                             </connections>

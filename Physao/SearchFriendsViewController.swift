@@ -31,14 +31,13 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return searchResult.count
     }
     
-    
+    // Show the search result list in table view
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = myTableView.dequeueReusableCellWithIdentifier("cell") as! SendInvitationTableViewCell
         let name = searchResult[indexPath.row]
@@ -51,11 +50,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         else {
             cell.connectButton.addTarget(self, action: Selector("SendInvitationAction:"), forControlEvents: .TouchUpInside)
         }
-        //name_To = searchResult[indexPath.row]
-        //print(name_To)
         return cell
     }
     
+    // Act when press send button
     @IBAction func SendInvitationAction(sender: UIButton){
         let str: String = "Invitation Sent"
         sender.setTitle(str, forState: .Normal)
@@ -66,6 +64,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         }
     }
     
+    // After click search button in searchbar, it will search the result in Parse.com
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         mySearchBar.resignFirstResponder()
         
@@ -81,7 +80,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
                     for item in array{
                         print(item)
                         let fullName = item.objectForKey("name") as! String
-                        if fullName != self.name_From{
+                        if fullName != self.name_From && !self.hasExistInResult(fullName){
                             let times = item.objectForKey("times") as! String
                             let untilDate = item.objectForKey("untilDate") as! String
                             let patient = Patient(name: fullName, times: times, date: untilDate)
@@ -99,11 +98,23 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         }
     }
     
+    // Determine whether the search result has existed in the searchResult array. If so, do not add this name to array.
+    func hasExistInResult(name: String) -> Bool{
+        for item in self.searchResult{
+            if item == name{
+                return true
+            }
+        }
+        return false
+    }
+    
     func searchBarCancelButtonClicked(searchBar: UISearchBar){
         mySearchBar.resignFirstResponder()
         mySearchBar.text = ""
     }
     
+    
+    // After press sendInvitation button. It will send message to Parse.com and change some columns there.
     func SaveInvitation(nameFrom: String, nameTo: String){
         let InvitationObject = PFObject(className: "InvitationObject")
         let acl = PFACL()
@@ -132,6 +143,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         }
     }
     
+    // This function is designed to get user info from Parse.com
     func getPatientInfo(patientName: String){
         let query = PFQuery(className: "FriendsInfo")
         query.whereKey("name", equalTo: patientName)
@@ -150,6 +162,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         }
     }
     
+    
+    // This function is used to get all of the invitations this user has sent, which aims not to send same invitation to others before other friends confirm.
     func getUserInvitation(){
         let query = PFQuery(className: "InvitationObject")
         query.whereKey("nameFrom", equalTo: name_From)
@@ -171,11 +185,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate,UITable
         let date = NSDate()
         let formatter = NSDateFormatter()
         let dateFormat = NSDateFormatter.dateFormatFromTemplate("MMddyyyy", options: 0, locale: NSLocale(localeIdentifier: "en-US"))
-        //gbDateFormat now contains an optional string "dd/MM/yyyy"
         formatter.dateFormat = dateFormat
         let dateString = formatter.stringFromDate(date)
-        
-        print(dateString)
         return dateString
     }
     

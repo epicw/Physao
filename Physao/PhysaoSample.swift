@@ -24,7 +24,7 @@ let FEV1_IDENTIFIER = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIde
 let PEFR_IDENTIFIER = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierPeakExpiratoryFlowRate)!
 let All_Types:Set<HKQuantityType> = [FVC_IDENTIFIER, FEV1_IDENTIFIER, PEFR_IDENTIFIER]
 
-// Class that enapsulates singular spirometer test (6 second or 2 second)
+// Class that enapsulates the results from a singular spirometer test (6 second or 2 second)
 class PhysaoSample: NSObject {
     
     //MARK: Instance variables
@@ -61,6 +61,7 @@ class PhysaoSample: NSObject {
         self.PEFRSample = HKQuantitySample(type: PEFR_IDENTIFIER, quantity: PEFRQuantity, startDate: self.startDate, endDate: self.endDate)
     }
     
+    //MARK: Instance methods
     func save(store:HKHealthStore) {
         
         let callBack = { ( success: Bool, err: NSError?) -> Void in
